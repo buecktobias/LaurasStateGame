@@ -2,6 +2,10 @@
 
 public class QuitState : AbstractState
 {
+    public override void CreateTransitions()
+    {
+    }
+
     public override string GetIntroOutput()
     {
         return "Das Spiel wurde beendet";
@@ -15,5 +19,10 @@ public class QuitState : AbstractState
     public override bool IsEndState()
     {
         return true;
+    }
+
+    public override IGameInformation Execute(IGameInformation gameInformation)
+    {
+        return gameInformation;
     }
 }

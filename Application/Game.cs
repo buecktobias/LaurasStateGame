@@ -6,7 +6,7 @@ public class Game
 
     public Game()
     {
-        CurrentState = new StateFactory().GetStartState();
+        CurrentState = StateFactory.GetInstance().GetGameStartState();
     }
 
     public void StartGame()
@@ -16,15 +16,19 @@ public class Game
 
     private void GameLoop()
     {
+        IGameInformation gameInformation = new GameInformation();
         while (true)
         {
             Console.WriteLine(CurrentState.GetIntroOutput());
+            gameInformation = CurrentState.Execute(gameInformation);
             if (CurrentState.IsEndState())
             {
                 return;
             }
             var input = Console.ReadLine() ?? string.Empty;
-            var transition = CurrentState.GetMatchingTransitionInput(input);
+            var transition = CurrentState.GetMatchingTransitionInput(input, gameInformation);
+            gameInformation = transition.Execute(input, gameInformation);
+            Console.WriteLine(transition.GetOutput());
             Console.WriteLine(CurrentState.GetOutroOutput());
             CurrentState = transition.GetTargetState();
         }

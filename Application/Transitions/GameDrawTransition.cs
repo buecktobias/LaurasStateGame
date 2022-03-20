@@ -1,10 +1,10 @@
 ﻿namespace Application;
 
-public class QuitTransition : AbstractTransition
+public class GameDrawTransition : AbstractTransition
 {
     public override bool Matches(string input, IGameInformation gameInformation)
     {
-        return input == "quit";
+        return gameInformation.OpponentInformation == gameInformation.PlayerInformation;
     }
 
     public override IGameInformation Execute(string input, IGameInformation gameInformation)
@@ -14,11 +14,11 @@ public class QuitTransition : AbstractTransition
 
     public override IState GetTargetState()
     {
-        return this.StateFactory.GetQuitState();
+        return this.StateFactory.GetGameStartState();
     }
 
     public override string GetOutput()
     {
-        return "Quit";
+        return "Unentschieden ! Nächste Runde !";
     }
 }

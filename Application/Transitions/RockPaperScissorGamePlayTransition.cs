@@ -1,24 +1,27 @@
 ﻿namespace Application;
 
-public class QuitTransition : AbstractTransition
+public class RockPaperScissorGamePlayTransition: AbstractTransition
 {
+    
     public override bool Matches(string input, IGameInformation gameInformation)
     {
-        return input == "quit";
+        return true;
     }
+    
 
     public override IGameInformation Execute(string input, IGameInformation gameInformation)
     {
+        gameInformation.PlayerInformation = input;
         return gameInformation;
     }
 
     public override IState GetTargetState()
     {
-        return this.StateFactory.GetQuitState();
+        return this.StateFactory.GetOpponentsTurnState();
     }
 
     public override string GetOutput()
     {
-        return "Quit";
+        return "";
     }
 }

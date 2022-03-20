@@ -2,5 +2,6 @@
 
 public interface IGameInformation
 {
-    public int Life { get; set; }
+    public string PlayerInformation { get; set; }
+    public string OpponentInformation { get; set; }
 }

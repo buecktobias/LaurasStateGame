@@ -1,16 +1,18 @@
 ﻿namespace Application;
 
-public class StartState : AbstractState
+public class RockPaperScissorGameStart : AbstractState
 {
     public override void CreateTransitions()
     {
+        this.Transitions.Add(_transitionFactory.GetGamePlayTransition());
     }
 
     public override string GetIntroOutput()
     {
-        return "Game Has Started";
+        return "Willkommen bei Schere Stein Papier! \n" +
+               "Gebe entweder Schere, Stein oder Papier ein \n" +
+               "Schere,Stein, Papier!";
     }
-    
 
     public override string GetOutroOutput()
     {
