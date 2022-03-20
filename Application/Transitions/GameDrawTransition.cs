@@ -1,4 +1,4 @@
-﻿namespace Application;
+﻿namespace Application.Transitions;
 
 public class GameDrawTransition : AbstractTransition
 {
@@ -7,14 +7,9 @@ public class GameDrawTransition : AbstractTransition
         return gameInformation.OpponentInformation == gameInformation.PlayerInformation;
     }
 
-    public override IGameInformation Execute(string input, IGameInformation gameInformation)
-    {
-        return gameInformation;
-    }
-
     public override IState GetTargetState()
     {
-        return this.StateFactory.GetGameStartState();
+        return StateFactory.GetGameStartState();
     }
 
     public override string GetOutput()

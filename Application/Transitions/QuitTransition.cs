@@ -1,4 +1,4 @@
-﻿namespace Application;
+﻿namespace Application.Transitions;
 
 public class QuitTransition : AbstractTransition
 {
@@ -7,14 +7,9 @@ public class QuitTransition : AbstractTransition
         return input == "quit";
     }
 
-    public override IGameInformation Execute(string input, IGameInformation gameInformation)
-    {
-        return gameInformation;
-    }
-
     public override IState GetTargetState()
     {
-        return this.StateFactory.GetQuitState();
+        return StateFactory.GetQuitState();
     }
 
     public override string GetOutput()

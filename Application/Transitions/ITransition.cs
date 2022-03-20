@@ -1,4 +1,4 @@
-﻿namespace Application;
+﻿namespace Application.Transitions;
 
 public interface ITransition
 {

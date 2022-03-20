@@ -1,13 +1,12 @@
-﻿namespace Application;
+﻿namespace Application.Transitions;
 
-public class RockPaperScissorGamePlayTransition: AbstractTransition
+public class RockPaperScissorGamePlayTransition : AbstractTransition
 {
-    
     public override bool Matches(string input, IGameInformation gameInformation)
     {
         return true;
     }
-    
+
 
     public override IGameInformation Execute(string input, IGameInformation gameInformation)
     {
@@ -17,11 +16,6 @@ public class RockPaperScissorGamePlayTransition: AbstractTransition
 
     public override IState GetTargetState()
     {
-        return this.StateFactory.GetOpponentsTurnState();
-    }
-
-    public override string GetOutput()
-    {
-        return "";
+        return StateFactory.GetOpponentsTurnState();
     }
 }

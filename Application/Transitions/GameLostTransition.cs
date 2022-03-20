@@ -1,28 +1,23 @@
-﻿namespace Application;
+﻿namespace Application.Transitions;
 
 public class GameLostTransition : AbstractTransition
 {
     public override bool Matches(string input, IGameInformation gameInformation)
     {
         var wonWithPaper = gameInformation.PlayerInformation == "Papier" &&
-                            gameInformation.OpponentInformation == "Stein";
+                           gameInformation.OpponentInformation == "Stein";
         var wonWithStone = gameInformation.PlayerInformation == "Stein" &&
-                            gameInformation.OpponentInformation == "Schere";
+                           gameInformation.OpponentInformation == "Schere";
         var wonWithScissors = gameInformation.PlayerInformation == "Schere" &&
-                               gameInformation.OpponentInformation == "Papier";
+                              gameInformation.OpponentInformation == "Papier";
         var isDraw = gameInformation.PlayerInformation == gameInformation.OpponentInformation;
         return !wonWithPaper && !wonWithStone && !wonWithScissors &&
                !isDraw;
     }
 
-    public override IGameInformation Execute(string input, IGameInformation gameInformation)
-    {
-        return gameInformation;
-    }
-
     public override IState GetTargetState()
     {
-        return this.StateFactory.GetQuitState();
+        return StateFactory.GetQuitState();
     }
 
     public override string GetOutput()

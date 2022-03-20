@@ -1,4 +1,6 @@
-﻿namespace Application;
+﻿using Application.Transitions;
+
+namespace Application;
 
 public interface ITransitionFactory
 {
@@ -8,5 +10,4 @@ public interface ITransitionFactory
     ITransition GetGameDrawTransition();
     ITransition GetGameLostTransition();
     ITransition GetGamePlayTransition();
-
 }

@@ -1,26 +1,12 @@
-﻿namespace Application;
+﻿using Application.Transitions;
+
+namespace Application;
 
 public class TransitionFactory : ITransitionFactory
 {
     private static ITransitionFactory? _instance;
-    public static ITransitionFactory GetInstance()
-    {
-        if (_instance == null)
-        {
-            _instance = new TransitionFactory();
-        }
 
-        return _instance;
 
-    }
-
-    public ITransition GameWonTransition { get; set; }
-    public ITransition GameDrawTransition { get; set; }
-    public ITransition GameLostTransition   { get; set; }
-    public ITransition GamePlayTranition   { get; set; }
-    public ITransition QuitTransition   { get; set; }
-
-    
     private TransitionFactory()
     {
         GameWonTransition = new GameWonTransition();
@@ -30,11 +16,16 @@ public class TransitionFactory : ITransitionFactory
         QuitTransition = new QuitTransition();
     }
 
+    private ITransition GameWonTransition { get; set; }
+    private ITransition GameDrawTransition { get; set; }
+    private ITransition GameLostTransition { get; set; }
+    private ITransition GamePlayTranition { get; set; }
+    private ITransition QuitTransition { get; set; }
+
     public ITransition GetNoMatchTransition()
     {
         return GetQuitTransition();
     }
-
 
 
     public ITransition GetGameWonTransition()
@@ -57,12 +48,20 @@ public class TransitionFactory : ITransitionFactory
         return GamePlayTranition;
     }
 
-    public ITransition GetQuitTransition()
-    {
-        return QuitTransition;
-    }
     public ITransition GetTransition(string identifier)
     {
         throw new NotImplementedException();
+    }
+
+    public static ITransitionFactory GetInstance()
+    {
+        if (_instance == null) _instance = new TransitionFactory();
+
+        return _instance;
+    }
+
+    public ITransition GetQuitTransition()
+    {
+        return QuitTransition;
     }
 }

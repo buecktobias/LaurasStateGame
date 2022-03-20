@@ -1,10 +1,10 @@
-﻿namespace Application;
+﻿namespace Application.States;
 
 public class RockPaperScissorGameStart : AbstractState
 {
-    public override void CreateTransitions()
+    protected override void CreateTransitions()
     {
-        this.Transitions.Add(_transitionFactory.GetGamePlayTransition());
+        Transitions.Add(TransitionFactory.GetGamePlayTransition());
     }
 
     public override string GetIntroOutput()
@@ -12,20 +12,5 @@ public class RockPaperScissorGameStart : AbstractState
         return "Willkommen bei Schere Stein Papier! \n" +
                "Gebe entweder Schere, Stein oder Papier ein \n" +
                "Schere,Stein, Papier!";
-    }
-
-    public override string GetOutroOutput()
-    {
-        return "";
-    }
-
-    public override bool IsEndState()
-    {
-        return false;
-    }
-
-    public override IGameInformation Execute(IGameInformation gameInformation)
-    {
-        return gameInformation;
     }
 }

@@ -1,17 +1,50 @@
-﻿namespace Application;
+﻿using Application.Transitions;
 
+namespace Application;
+using Application.StateFactory;
 public class Game
 {
-    private IState CurrentState { get; set; }
-
     public Game()
     {
-        CurrentState = StateFactory.GetInstance().GetGameStartState();
+        CurrentState = StateFactory.StateFactory.GetInstance().GetGameStartState();
     }
+
+    private IState CurrentState { get; set; }
 
     public void StartGame()
     {
-        this.GameLoop();
+        GameLoop();
+    }
+
+    private void WriteStateIntroOutput()
+    {
+        Console.WriteLine(CurrentState.GetIntroOutput());
+
+    }
+
+    private IGameInformation ExecuteCurrentState(IGameInformation gameInformation)
+    {
+        return CurrentState.Execute(gameInformation);
+    }
+
+    private string ReadInput()
+    {
+        return Console.ReadLine() ?? string.Empty;
+    }
+
+    private ITransition GetMatchingTransition(string input, IGameInformation gameInformation)
+    {
+        return CurrentState.GetMatchingTransitionInput(input, gameInformation);
+    }
+
+    private void WriteStateOutroOutput()
+    {
+        Console.WriteLine(CurrentState.GetOutroOutput());
+    }
+
+    private void WriteTransitionOutput(ITransition transition)
+    {
+        Console.WriteLine(transition.GetOutput());
     }
 
     private void GameLoop()
@@ -19,17 +52,14 @@ public class Game
         IGameInformation gameInformation = new GameInformation();
         while (true)
         {
-            Console.WriteLine(CurrentState.GetIntroOutput());
-            gameInformation = CurrentState.Execute(gameInformation);
-            if (CurrentState.IsEndState())
-            {
-                return;
-            }
-            var input = Console.ReadLine() ?? string.Empty;
-            var transition = CurrentState.GetMatchingTransitionInput(input, gameInformation);
+            WriteStateIntroOutput();
+            gameInformation = ExecuteCurrentState(gameInformation);
+            if (CurrentState.IsEndState()) return;
+            var input = ReadInput();
+            var transition = GetMatchingTransition(input, gameInformation);
             gameInformation = transition.Execute(input, gameInformation);
-            Console.WriteLine(transition.GetOutput());
-            Console.WriteLine(CurrentState.GetOutroOutput());
+            WriteTransitionOutput(transition);
+            WriteStateOutroOutput();
             CurrentState = transition.GetTargetState();
         }
     }

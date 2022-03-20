@@ -1,65 +1,41 @@
-﻿namespace Application;
+﻿using Application.States;
+
+namespace Application.StateFactory;
 
 public class StateFactory : IStateFactory
 {
     private static IStateFactory? _instance;
+    private IState? _gameOpponentTurn;
+    private IState? _gameStartState;
+    private IState? _quitState;
 
-    public static IStateFactory GetInstance()
-    {
-        if (_instance == null)
-        {
-            _instance = new StateFactory();
-        }
-
-        return _instance;
-
-    }
-    
-    private  IState? _startState;
-    private  IState? _gameStartState;
-    private  IState? _gameOpponentTurn;
-    private  IState? _quitState;
     private StateFactory()
     {
     }
 
     public IState GetQuitState()
     {
-        if (_quitState == null)
-        {
-            _quitState = new QuitState();
-        }
+        if (_quitState == null) _quitState = new QuitState();
         return _quitState;
     }
 
-    public IState GetStartState()
-    {
-        if (_startState == null)
-        {
-            _startState = new RockPaperScissorGameStart();
-        }
-        return this._startState;
-    }
     public IState GetOpponentsTurnState()
     {
-        if (this._gameOpponentTurn == null)
-        {
-            this._gameOpponentTurn = new OponentsTurnState();
-        }
-        return this._gameOpponentTurn;
+        if (_gameOpponentTurn == null) _gameOpponentTurn = new OpponentsTurnState();
+        return _gameOpponentTurn;
     }
 
     public IState GetGameStartState()
     {
-        if (this._gameStartState == null)
-        {
-            this._gameStartState = new RockPaperScissorGameStart();
-        }
-        return this._gameStartState;
+        if (_gameStartState == null) _gameStartState = new RockPaperScissorGameStart();
+        return _gameStartState;
     }
+    
 
-    public IState GetState(string stateIdentifier)
+    public static IStateFactory GetInstance()
     {
-        throw new NotImplementedException();
+        if (_instance == null) _instance = new StateFactory();
+
+        return _instance;
     }
 }
