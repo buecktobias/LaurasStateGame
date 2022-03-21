@@ -1,16 +1,19 @@
 ﻿using Application.States;
+using Application.Transitions;
 
 namespace Application.StateFactory;
 
 public class StateFactory : IStateFactory
 {
     private static IStateFactory? _instance;
+    private ITransitionFactory _transitionFactory;
     private IState? _gameOpponentTurn;
     private IState? _gameStartState;
     private IState? _quitState;
 
     private StateFactory()
     {
+        // _transitionFactory = TransitionFactory.GetInstance();
     }
 
     public IState GetQuitState()
@@ -37,7 +40,14 @@ public class StateFactory : IStateFactory
     {
         if (_gameStartState == null)
         {
-            _gameStartState = new RockPaperScissorGameStart();
+            var introText = "Willkommen bei Schere Stein Papier! \n" +
+                            "Gebe entweder Schere, Stein oder Papier ein \n" +
+                            "Schere,Stein, Papier!";
+            var transitions = new List<ITransition>()
+            {
+                TransitionFactory.GetInstance().GetGamePlayTransition()
+            };
+            _gameStartState = new SimpleState(introText, transitions);
             _gameStartState.CreateTransitions();
         }
         return _gameStartState;
