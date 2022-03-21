@@ -1,4 +1,5 @@
 ﻿using Application.GameInformation;
+using Application.RockPaperScissors;
 using Application.TransitionFactory;
 
 namespace Application.States;
@@ -26,11 +27,11 @@ public class OpponentsTurnState : AbstractState<IRockPaperScissorGameInformation
         Console.WriteLine("Der Gegner hat " + rockPaperScissorGameInformation.OpponentInformation + " gewählt.");
         return rockPaperScissorGameInformation;
     }
-
-    private string GetRandom()
+    
+    private GameSymbol GetRandom()
     {
         var num = _randomNumberGenerator.Next(0, 3);
-        return new List<string> {"Schere", "Stein", "Papier"}[num];
+        return new List<GameSymbol> {GameSymbol.Stone, GameSymbol.Stone, GameSymbol.Paper}[num];
     }
 
     public OpponentsTurnState() : base(RockPaperScissors.RockPaperScissorTransitionFactory.GetInstance())

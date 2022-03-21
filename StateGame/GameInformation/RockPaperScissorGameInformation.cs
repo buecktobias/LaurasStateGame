@@ -1,7 +1,9 @@
-﻿namespace Application.GameInformation;
+﻿using Application.RockPaperScissors;
+
+namespace Application.GameInformation;
 
 public class RockPaperScissorGameInformation : IRockPaperScissorGameInformation
 {
-    public string PlayerInformation { get; set; } = "";
-    public string OpponentInformation { get; set; } = "";
+    public GameSymbol PlayerInformation { get; set; }
+    public GameSymbol OpponentInformation { get; set; }
 }

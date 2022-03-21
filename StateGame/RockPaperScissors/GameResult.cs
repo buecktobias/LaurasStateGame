@@ -1,6 +1,6 @@
 ﻿namespace Application.RockPaperScissors;
 
-public enum GameSymbols
+public enum GameResult
 {
-    Paper,Stone,Scissor
+    Won, Lost, Draw
 }

@@ -35,10 +35,9 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
             bool MatchFunc(string s, IGameInformation info)
             {
                 var gameInformation = (IRockPaperScissorGameInformation) info;
-                var wonWithPaper = gameInformation.PlayerInformation == "Papier" && gameInformation.OpponentInformation == "Stein";
-                var wonWithStone = gameInformation.PlayerInformation == "Stein" && gameInformation.OpponentInformation == "Schere";
-                var wonWithScissors = gameInformation.PlayerInformation == "Schere" && gameInformation.OpponentInformation == "Papier";
-                return wonWithPaper || wonWithStone || wonWithScissors;
+                var gameResult = new GameEngine().GetGameResult(gameInformation.PlayerInformation,
+                    gameInformation.OpponentInformation);
+                return gameResult == GameResult.Won;
             }
 
             var transitionBuilder = new TransitionBuilder();
@@ -74,18 +73,11 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
     {
         if (this.GameLostTransition == null)
         {
-            TransitionMatchFunc matchFunc = (s, info) =>
+            TransitionMatchFunc matchFunc = (_, info) =>
             {
                 var gameInformation = (IRockPaperScissorGameInformation) info;
-                var wonWithPaper = gameInformation.PlayerInformation == "Papier" &&
-                                   gameInformation.OpponentInformation == "Stein";
-                var wonWithStone = gameInformation.PlayerInformation == "Stein" &&
-                                   gameInformation.OpponentInformation == "Schere";
-                var wonWithScissors = gameInformation.PlayerInformation == "Schere" &&
-                                      gameInformation.OpponentInformation == "Papier";
-                var isDraw = gameInformation.PlayerInformation == gameInformation.OpponentInformation;
-                return !wonWithPaper && !wonWithStone && !wonWithScissors &&
-                       !isDraw;
+                var result =new GameEngine().GetGameResult(gameInformation.PlayerInformation, gameInformation.OpponentInformation);
+                return result == GameResult.Lost;
             };
             var transitionBuilder = new TransitionBuilder();
             transitionBuilder.SetMatchFunc(matchFunc);
@@ -104,11 +96,12 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
             transitionBuilder.SetExecuteFunc(((s, info) =>
             {
                 var information = (IRockPaperScissorGameInformation) info;
-                information.PlayerInformation = s;
+                information.PlayerInformation = (GameSymbol) new SymbolInputReader().ReadSymbol(s);
                 return information;
             }));
+            transitionBuilder.SetMatchFunc(((text, _) => (new SymbolInputReader().ReadSymbol(text)) != null));
             transitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetOpponentsTurnState());
-            this.GamePlayTransition = transitionBuilder.GetTransition();
+            GamePlayTransition = transitionBuilder.GetTransition();
         }
         return GamePlayTransition;
         
