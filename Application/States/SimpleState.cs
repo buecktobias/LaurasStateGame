@@ -8,10 +8,12 @@ public class SimpleState : AbstractState
     public string OutroOutput { get; set; }
     public bool EndState { get; set; }
     
-    
+    public IList<ITransition> NewTransitions { get; set; }
+    public Func<IGameInformation, IGameInformation> ExecuteFunc { get; set; }
+
     public SimpleState(
         string introOutput ="",
-        List<ITransition>? transitions = null,
+        IList<ITransition>? transitions = null,
         string outroOutput = "",
         bool isEndState = false,
         Func<IGameInformation, IGameInformation>? executeFunc = null)
@@ -19,31 +21,36 @@ public class SimpleState : AbstractState
         IntroOutput = introOutput;
         OutroOutput = outroOutput;
         EndState = isEndState;
+        NewTransitions = transitions ?? new List<ITransition>();
+        ExecuteFunc = executeFunc ?? (information => information) ;
 
     }
     
     public override string GetIntroOutput()
     {
-        return base.GetIntroOutput();
+        return IntroOutput;
     }
 
     public override string GetOutroOutput()
     {
-        return base.GetOutroOutput();
+        return OutroOutput;
     }
 
     public override bool IsEndState()
     {
-        return base.IsEndState();
+        return EndState;
     }
 
     public override IGameInformation Execute(IGameInformation gameInformation)
     {
-        return base.Execute(gameInformation);
+        return ExecuteFunc(gameInformation);
     }
 
     protected override void CreateTransitions()
     {
-        base.CreateTransitions();
+        foreach (var transition in NewTransitions)
+        {
+            Transitions.Add(transition);
+        }
     }
 }
