@@ -1,4 +1,6 @@
-﻿namespace Application.Transitions;
+﻿using Application.Transitions;
+
+namespace Application.old;
 
 public class QuitTransition : AbstractTransition
 {
@@ -9,7 +11,7 @@ public class QuitTransition : AbstractTransition
 
     public override IState GetTargetState()
     {
-        return StateFactory.GetQuitState();
+        return RockPaperScissorStateFactory.GetQuitState();
     }
 
     public override string GetOutput()

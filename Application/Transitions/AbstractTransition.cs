@@ -5,9 +5,9 @@ public abstract class AbstractTransition : ITransition
 {
     protected AbstractTransition()
     {
-        StateFactory = Application.StateFactory.StateFactory.GetInstance();
+        RockPaperScissorStateFactory = Application.StateFactory.RockPaperScissorStateFactory.GetInstance();
     }
-    protected IStateFactory StateFactory { get; }
+    protected IRockPaperScissorStateFactory RockPaperScissorStateFactory { get; }
 
     public abstract bool Matches(string input, IGameInformation gameInformation);
 

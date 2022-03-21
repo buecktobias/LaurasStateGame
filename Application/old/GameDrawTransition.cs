@@ -9,7 +9,7 @@ public class GameDrawTransition : AbstractTransition
 
     public override IState GetTargetState()
     {
-        return StateFactory.GetGameStartState();
+        return RockPaperScissorStateFactory.GetGameStartState();
     }
 
     public override string GetOutput()

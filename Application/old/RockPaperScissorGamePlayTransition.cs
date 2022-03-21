@@ -16,6 +16,6 @@ public class RockPaperScissorGamePlayTransition : AbstractTransition
 
     public override IState GetTargetState()
     {
-        return StateFactory.GetOpponentsTurnState();
+        return RockPaperScissorStateFactory.GetOpponentsTurnState();
     }
 }

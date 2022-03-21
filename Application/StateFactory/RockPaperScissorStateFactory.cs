@@ -1,19 +1,18 @@
 ﻿using Application.States;
+using Application.TransitionFactory;
 using Application.Transitions;
 
 namespace Application.StateFactory;
 
-public class StateFactory : IStateFactory
+public class RockPaperScissorStateFactory : IRockPaperScissorStateFactory
 {
-    private static IStateFactory? _instance;
-    private ITransitionFactory _transitionFactory;
+    private static IRockPaperScissorStateFactory? _instance;
     private IState? _gameOpponentTurn;
     private IState? _gameStartState;
     private IState? _quitState;
 
-    private StateFactory()
+    private RockPaperScissorStateFactory()
     {
-        // _transitionFactory = TransitionFactory.GetInstance();
     }
 
     public IState GetQuitState()
@@ -45,7 +44,7 @@ public class StateFactory : IStateFactory
                             "Schere,Stein, Papier!";
             var transitions = new List<ITransition>()
             {
-                TransitionFactory.GetInstance().GetGamePlayTransition()
+                Application.TransitionFactory.RockPaperScissorTransitionFactory.GetInstance().GetGamePlayTransition()
             };
             _gameStartState = new SimpleState(introText, transitions);
             _gameStartState.CreateTransitions();
@@ -54,11 +53,11 @@ public class StateFactory : IStateFactory
     }
     
 
-    public static IStateFactory GetInstance()
+    public static IRockPaperScissorStateFactory GetInstance()
     {
         if (_instance == null)
         {
-            _instance = new StateFactory();
+            _instance = new RockPaperScissorStateFactory();
             
         }
 

@@ -17,7 +17,7 @@ public class GameLostTransition : AbstractTransition
 
     public override IState GetTargetState()
     {
-        return StateFactory.GetQuitState();
+        return RockPaperScissorStateFactory.GetQuitState();
     }
 
     public override string GetOutput()

@@ -1,10 +1,9 @@
 ﻿using Application.Transitions;
 
-namespace Application;
+namespace Application.TransitionFactory;
 
-public interface ITransitionFactory
+public interface IRockPaperScissorTransitionFactory
 {
-    ITransition GetTransition(string identifier);
     ITransition GetNoMatchTransition();
     ITransition GetGameWonTransition();
     ITransition GetGameDrawTransition();

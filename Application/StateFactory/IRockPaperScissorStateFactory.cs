@@ -1,6 +1,6 @@
 ﻿namespace Application.StateFactory;
 
-public interface IStateFactory
+public interface IRockPaperScissorStateFactory
 {
     IState GetQuitState();
     IState GetOpponentsTurnState();

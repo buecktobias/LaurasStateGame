@@ -1,14 +1,15 @@
-﻿using Application.Transitions;
+﻿using Application.TransitionFactory;
+using Application.Transitions;
 
-namespace Application;
+namespace Application.States;
 
 public abstract class AbstractState : IState
 {
-    protected readonly ITransitionFactory TransitionFactory;
+    protected readonly RockPaperScissorTransitionFactory RockPaperScissorTransitionFactory;
 
     protected AbstractState()
     {
-        TransitionFactory = Application.TransitionFactory.GetInstance();
+        RockPaperScissorTransitionFactory = Application.TransitionFactory.RockPaperScissorTransitionFactory.GetInstance();
         Transitions = new List<ITransition>();
     }
 
@@ -23,7 +24,7 @@ public abstract class AbstractState : IState
     public ITransition GetMatchingTransitionInput(string input, IGameInformation gameInformation)
     {
         var transitionOrNull = GetMatchedTransitions(input, gameInformation);
-        return transitionOrNull ?? TransitionFactory.GetNoMatchTransition();
+        return transitionOrNull ?? RockPaperScissorTransitionFactory.GetNoMatchTransition();
     }
 
     public virtual string GetOutroOutput()

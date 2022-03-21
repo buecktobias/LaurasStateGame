@@ -6,7 +6,7 @@ public class Game
 {
     public Game()
     {
-        CurrentState = StateFactory.StateFactory.GetInstance().GetGameStartState();
+        CurrentState = StateFactory.RockPaperScissorStateFactory.GetInstance().GetGameStartState();
     }
 
     private IState CurrentState { get; set; }
@@ -53,8 +53,8 @@ public class Game
         while (true)
         {
             WriteStateIntroOutput();
-            gameInformation = ExecuteCurrentState(gameInformation);
             if (CurrentState.IsEndState()) return;
+            gameInformation = ExecuteCurrentState(gameInformation);
             var input = ReadInput();
             var transition = GetMatchingTransition(input, gameInformation);
             gameInformation = transition.Execute(input, gameInformation);
