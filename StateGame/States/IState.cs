@@ -3,6 +3,7 @@ using Application.Transitions;
 
 namespace Application.States;
 
+public delegate IGameInformation ExecutionFunction(IGameInformation gameInformation);
 public interface IState <TGameInformation> where TGameInformation : IGameInformation
 {
     public string GetIntroOutput();

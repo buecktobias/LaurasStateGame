@@ -20,7 +20,10 @@ public class RockPaperScissorStateFactory : IRockPaperScissorStateFactory
     {
         if (_quitState == null)
         {
-            _quitState = new SimpleRockPaperScissorState("Das Spiel wurde beendet");
+            var stateBuilder = new SimpleRockPaperScissorBuilder();
+            stateBuilder.SetIntroOutput("Das Spiel wurde beendet");
+            stateBuilder.SetAsEndState();
+            _quitState = stateBuilder.GetState();
             _quitState.CreateTransitions();
         }
         return _quitState;
@@ -47,7 +50,10 @@ public class RockPaperScissorStateFactory : IRockPaperScissorStateFactory
             {
                 RockPaperScissorTransitionFactory.GetInstance().GetGamePlayTransition()
             };
-            _gameStartState = new SimpleRockPaperScissorState(introText, transitions);
+            var startStateBuilder = new SimpleRockPaperScissorBuilder();
+            startStateBuilder.SetIntroOutput(introText);
+            startStateBuilder.SetTransitions(transitions);
+            _gameStartState = startStateBuilder.GetState();
             _gameStartState.CreateTransitions();
         }
         return _gameStartState;

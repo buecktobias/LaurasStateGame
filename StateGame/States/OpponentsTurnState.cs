@@ -6,6 +6,7 @@ namespace Application.States;
 public class OpponentsTurnState : AbstractState<IRockPaperScissorGameInformation,
     IRockPaperScissorTransitionFactory>
 {
+    private readonly Random _randomNumberGenerator;
     public override void CreateTransitions()
     {
         Transitions.Add(RockPaperScissorTransitionFactory.GetGameDrawTransition());
@@ -28,12 +29,12 @@ public class OpponentsTurnState : AbstractState<IRockPaperScissorGameInformation
 
     private string GetRandom()
     {
-        var random = new Random();
-        var num = random.Next(0, 3);
+        var num = _randomNumberGenerator.Next(0, 3);
         return new List<string> {"Schere", "Stein", "Papier"}[num];
     }
 
     public OpponentsTurnState() : base(TransitionFactory.RockPaperScissorTransitionFactory.GetInstance())
     {
+        _randomNumberGenerator = new Random();
     }
 }
