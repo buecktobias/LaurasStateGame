@@ -1,9 +1,11 @@
 ﻿using Application.GameInformation;
+using Application.RockPaperScissors.States;
+using Application.StateFactory;
 using Application.States;
 using Application.TransitionFactory;
 using Application.Transitions;
 
-namespace Application.StateFactory;
+namespace Application.RockPaperScissors;
 
 public class RockPaperScissorStateFactory : IRockPaperScissorStateFactory
 {
@@ -55,6 +57,8 @@ public class RockPaperScissorStateFactory : IRockPaperScissorStateFactory
             startStateBuilder.SetTransitions(transitions);
             _gameStartState = startStateBuilder.GetState();
             _gameStartState.CreateTransitions();
+
+            new Application.RockPaperScissors.States.SimpleRockPaperScissorState();
         }
         return _gameStartState;
     }

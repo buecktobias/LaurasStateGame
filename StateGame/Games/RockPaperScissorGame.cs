@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using Application.GameInformation;
+using Application.RockPaperScissors;
 using Application.StateFactory;
 using Application.States;
 

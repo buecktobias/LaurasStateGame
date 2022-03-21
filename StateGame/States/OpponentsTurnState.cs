@@ -33,7 +33,7 @@ public class OpponentsTurnState : AbstractState<IRockPaperScissorGameInformation
         return new List<string> {"Schere", "Stein", "Papier"}[num];
     }
 
-    public OpponentsTurnState() : base(TransitionFactory.RockPaperScissorTransitionFactory.GetInstance())
+    public OpponentsTurnState() : base(RockPaperScissors.RockPaperScissorTransitionFactory.GetInstance())
     {
         _randomNumberGenerator = new Random();
     }

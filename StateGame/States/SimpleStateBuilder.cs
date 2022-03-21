@@ -26,7 +26,7 @@ where TTransitionFactory : ITransitionFactory<TGameInformation>
     
     public void SetOutroOutput(string outroOutput)
     {
-        _state.IntroOutput = outroOutput;
+        _state.OutroOutput = outroOutput;
     }
 
     public void SetExecuteFunction(ExecutionFunction executionFunction)

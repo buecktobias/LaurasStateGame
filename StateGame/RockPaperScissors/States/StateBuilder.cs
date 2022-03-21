@@ -1,7 +1,8 @@
 ﻿using Application.GameInformation;
+using Application.States;
 using Application.TransitionFactory;
 
-namespace Application.States;
+namespace Application.RockPaperScissors.States;
 
 public class SimpleRockPaperScissorBuilder : SimpleStateBuilder<IRockPaperScissorGameInformation, IRockPaperScissorTransitionFactory>
 {
