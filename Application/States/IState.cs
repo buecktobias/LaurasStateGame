@@ -9,4 +9,5 @@ public interface IState
     public string GetOutroOutput();
     public bool IsEndState();
     public IGameInformation Execute(IGameInformation gameInformation);
+    public void CreateTransitions();
 }

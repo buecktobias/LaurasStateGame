@@ -4,28 +4,37 @@ namespace Application.States;
 
 public class SimpleState : AbstractState
 {
-    public string IntroOutput { get; set; }
-    public string OutroOutput { get; set; }
-    public bool EndState { get; set; }
-    
-    public IList<ITransition> NewTransitions { get; set; }
-    public Func<IGameInformation, IGameInformation> ExecuteFunc { get; set; }
+    private string IntroOutput { get; set; }
+    private string OutroOutput { get; set; }
+    private bool EndState { get; set; }
+
+    private IList<ITransition> NewTransitions { get; set; }
+    private Func<IGameInformation, IGameInformation> ExecuteFunc { get; set; }
+
+    public SimpleState(string introOutput):this(introOutput, new List<ITransition>()){}
+    public SimpleState(string introOutput, IList<ITransition> newTransitions):
+        this(introOutput, newTransitions, "", false)
+    {
+    }
+
+    public SimpleState(string introOutput, IList<ITransition> newTransitions, string outroOutput, bool endState):
+        this(introOutput, newTransitions, outroOutput, endState, (information) => information) { }
 
     public SimpleState(
-        string introOutput ="",
-        IList<ITransition>? transitions = null,
-        string outroOutput = "",
-        bool isEndState = false,
-        Func<IGameInformation, IGameInformation>? executeFunc = null)
+        string introOutput,
+        IList<ITransition> transitions,
+        string outroOutput,
+        bool isEndState,
+        Func<IGameInformation, IGameInformation> executeFunc)
     {
         IntroOutput = introOutput;
         OutroOutput = outroOutput;
         EndState = isEndState;
-        NewTransitions = transitions ?? new List<ITransition>();
-        ExecuteFunc = executeFunc ?? (information => information) ;
-
+        NewTransitions = transitions;
+        ExecuteFunc = executeFunc;
     }
     
+
     public override string GetIntroOutput()
     {
         return IntroOutput;
@@ -46,7 +55,7 @@ public class SimpleState : AbstractState
         return ExecuteFunc(gameInformation);
     }
 
-    protected override void CreateTransitions()
+    public override void CreateTransitions()
     {
         foreach (var transition in NewTransitions)
         {

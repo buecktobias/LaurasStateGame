@@ -10,8 +10,6 @@ public abstract class AbstractState : IState
     {
         TransitionFactory = Application.TransitionFactory.GetInstance();
         Transitions = new List<ITransition>();
-        // ReSharper disable once VirtualMemberCallInConstructor
-        CreateTransitions();
     }
 
 
@@ -43,7 +41,7 @@ public abstract class AbstractState : IState
         return gameInformation;
     }
 
-    protected virtual void CreateTransitions()
+    public virtual void CreateTransitions()
     {
     }
     private ITransition? GetMatchedTransitions(string input, IGameInformation gameInformation)

@@ -15,26 +15,42 @@ public class StateFactory : IStateFactory
 
     public IState GetQuitState()
     {
-        if (_quitState == null) _quitState = new QuitState();
+        if (_quitState == null)
+        {
+            _quitState = new SimpleState("Das Spiel wurde beendet");
+            _quitState.CreateTransitions();
+        }
         return _quitState;
     }
 
     public IState GetOpponentsTurnState()
     {
-        if (_gameOpponentTurn == null) _gameOpponentTurn = new OpponentsTurnState();
+        if (_gameOpponentTurn == null)
+        {
+            _gameOpponentTurn = new OpponentsTurnState();
+            _gameOpponentTurn.CreateTransitions();
+        }
         return _gameOpponentTurn;
     }
 
     public IState GetGameStartState()
     {
-        if (_gameStartState == null) _gameStartState = new RockPaperScissorGameStart();
+        if (_gameStartState == null)
+        {
+            _gameStartState = new RockPaperScissorGameStart();
+            _gameStartState.CreateTransitions();
+        }
         return _gameStartState;
     }
     
 
     public static IStateFactory GetInstance()
     {
-        if (_instance == null) _instance = new StateFactory();
+        if (_instance == null)
+        {
+            _instance = new StateFactory();
+            
+        }
 
         return _instance;
     }

@@ -2,7 +2,7 @@
 
 public class OpponentsTurnState : AbstractState
 {
-    protected override void CreateTransitions()
+    public override void CreateTransitions()
     {
         Transitions.Add(TransitionFactory.GetGameDrawTransition());
         Transitions.Add(TransitionFactory.GetGameLostTransition());

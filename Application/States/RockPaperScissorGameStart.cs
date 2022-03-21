@@ -2,7 +2,7 @@
 
 public class RockPaperScissorGameStart : AbstractState
 {
-    protected override void CreateTransitions()
+    public override void CreateTransitions()
     {
         Transitions.Add(TransitionFactory.GetGamePlayTransition());
     }
