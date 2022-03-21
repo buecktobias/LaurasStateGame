@@ -1,16 +1,20 @@
-﻿using Application.Transitions;
+﻿using Application.GameInformation;
+using Application.States;
+using Application.Transitions;
 
-namespace Application;
-using Application.StateFactory;
-public class Game
+namespace Application.Games;
+
+public abstract class AbstractGame <TGameInformation> where TGameInformation : IGameInformation
 {
-    public Game()
+    private readonly TGameInformation _startGameInformation;
+    protected AbstractGame(IState<TGameInformation> startState, TGameInformation startGameInformation)
     {
-        CurrentState = StateFactory.RockPaperScissorStateFactory.GetInstance().GetGameStartState();
+        CurrentState = startState;
+        _startGameInformation = startGameInformation;
     }
 
-    private IState CurrentState { get; set; }
-
+    private IState<TGameInformation> CurrentState { get; set; }
+    
     public void StartGame()
     {
         GameLoop();
@@ -22,7 +26,7 @@ public class Game
 
     }
 
-    private IGameInformation ExecuteCurrentState(IGameInformation gameInformation)
+    private TGameInformation ExecuteCurrentState(TGameInformation gameInformation)
     {
         return CurrentState.Execute(gameInformation);
     }
@@ -32,7 +36,7 @@ public class Game
         return Console.ReadLine() ?? string.Empty;
     }
 
-    private ITransition GetMatchingTransition(string input, IGameInformation gameInformation)
+    private ITransition<TGameInformation> GetMatchingTransition(string input, TGameInformation gameInformation)
     {
         return CurrentState.GetMatchingTransitionInput(input, gameInformation);
     }
@@ -42,14 +46,14 @@ public class Game
         Console.WriteLine(CurrentState.GetOutroOutput());
     }
 
-    private void WriteTransitionOutput(ITransition transition)
+    private void WriteTransitionOutput(ITransition<TGameInformation> transition)
     {
         Console.WriteLine(transition.GetOutput());
     }
 
     private void GameLoop()
     {
-        IGameInformation gameInformation = new GameInformation();
+        TGameInformation gameInformation = _startGameInformation;
         while (true)
         {
             WriteStateIntroOutput();

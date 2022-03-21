@@ -1,6 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using Application;
+using Application.Games;
 
 Console.WriteLine("Hello, World!");
-new Game().StartGame();
+new RockPaperScissorGame().StartGame();

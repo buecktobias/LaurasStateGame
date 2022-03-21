@@ -1,4 +1,5 @@
-﻿using Application.StateFactory;
+﻿using Application.GameInformation;
+using Application.StateFactory;
 using Application.Transitions;
 
 namespace Application.TransitionFactory;
@@ -14,23 +15,23 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
         _rockPaperScissorStateFactory = StateFactory.RockPaperScissorStateFactory.GetInstance();
     }
 
-    private ITransition? GameWonTransition { get; set; }
-    private ITransition? GameDrawTransition { get; set; }
-    private ITransition? GameLostTransition { get; set; }
-    private ITransition? GamePlayTransition { get; set; }
-    private ITransition? QuitTransition { get; set; }
+    private ITransition<IRockPaperScissorGameInformation>? GameWonTransition { get; set; }
+    private ITransition<IRockPaperScissorGameInformation>? GameDrawTransition { get; set; }
+    private ITransition<IRockPaperScissorGameInformation>? GameLostTransition { get; set; }
+    private ITransition<IRockPaperScissorGameInformation>? GamePlayTransition { get; set; }
+    private ITransition<IRockPaperScissorGameInformation>? QuitTransition { get; set; }
 
-    public ITransition GetNoMatchTransition()
+    public ITransition<IRockPaperScissorGameInformation> GetNoMatchTransition()
     {
         return GetQuitTransition();
     }
 
 
-    public ITransition GetGameWonTransition()
+    public ITransition<IRockPaperScissorGameInformation> GetGameWonTransition()
     {
         if (this.GameWonTransition == null)
         {
-            Func<string, IGameInformation, bool> matchFunc = (s, gameInformation) =>
+            Func<string, IRockPaperScissorGameInformation, bool> matchFunc = (s, gameInformation) =>
             {
                 var wonWithPaper = gameInformation.PlayerInformation == "Papier" &&
                                    gameInformation.OpponentInformation == "Stein";
@@ -40,30 +41,31 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
                                       gameInformation.OpponentInformation == "Papier";
                 return wonWithPaper || wonWithStone || wonWithScissors;
             };
-            this.GameWonTransition = new SimpleTransition(matchFunc, _rockPaperScissorStateFactory.GetQuitState(), "Yeah Sie haben gewonnen!");
+            this.GameWonTransition = new SimpleRockPaperScissorTransition(matchFunc, _rockPaperScissorStateFactory.GetQuitState(), "Yeah Sie haben gewonnen!");
         }
         return GameWonTransition;
     }
 
-    public ITransition GetGameDrawTransition()
+    public ITransition<IRockPaperScissorGameInformation> GetGameDrawTransition()
     {
         if (this.GameDrawTransition == null)
         {
-            Func<string, IGameInformation, bool> matchFunc = (s, information) =>
+            Func<string, IRockPaperScissorGameInformation, bool> matchFunc = (s, information) =>
             {
                 return information.OpponentInformation == information.PlayerInformation;
             };
-            this.GameDrawTransition = new SimpleTransition(
+            this.GameDrawTransition = new SimpleRockPaperScissorTransition(
                 matchFunc, _rockPaperScissorStateFactory.GetGameStartState(),"Unentschieden ! Nächste Runde !");
         }
         return GameDrawTransition;
     }
+    
 
-    public ITransition GetGameLostTransition()
+    public ITransition<IRockPaperScissorGameInformation> GetGameLostTransition()
     {
         if (this.GameLostTransition == null)
         {
-            Func<string, IGameInformation, bool> matchFunc = (s, gameInformation) =>
+            Func<string, IRockPaperScissorGameInformation, bool> matchFunc = (s, gameInformation) =>
             {
                 var wonWithPaper = gameInformation.PlayerInformation == "Papier" &&
                                    gameInformation.OpponentInformation == "Stein";
@@ -75,16 +77,16 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
                 return !wonWithPaper && !wonWithStone && !wonWithScissors &&
                        !isDraw;
             };
-            this.GameLostTransition = new SimpleTransition(matchFunc, _rockPaperScissorStateFactory.GetQuitState(), "Sie haben leider verloren!");
+            this.GameLostTransition = new SimpleRockPaperScissorTransition(matchFunc, _rockPaperScissorStateFactory.GetQuitState(), "Sie haben leider verloren!");
         }
         return GameLostTransition;
     }
 
-    public ITransition GetGamePlayTransition()
+    public ITransition<IRockPaperScissorGameInformation> GetGamePlayTransition()
     {
         if (this.GamePlayTransition == null)
         {
-            this.GamePlayTransition = new SimpleTransition(
+            this.GamePlayTransition = new SimpleRockPaperScissorTransition(
                 ((s, information) => true),
                 _rockPaperScissorStateFactory.GetOpponentsTurnState(),
                 ((s, information) =>
@@ -98,11 +100,6 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
         
     }
 
-    public ITransition GetTransition(string identifier)
-    {
-        throw new NotImplementedException();
-    }
-
     public static RockPaperScissorTransitionFactory GetInstance()
     {
         if (_instance == null) _instance = new RockPaperScissorTransitionFactory();
@@ -110,11 +107,11 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
         return _instance;
     }
 
-    public ITransition GetQuitTransition()
+    public ITransition<IRockPaperScissorGameInformation> GetQuitTransition()
     {
         if (this.QuitTransition == null)
         {
-            QuitTransition = new SimpleTransition(((s, information) => s== "quit" ), _rockPaperScissorStateFactory.GetQuitState());
+            QuitTransition = new SimpleRockPaperScissorTransition(((s, information) => s== "quit" ), _rockPaperScissorStateFactory.GetQuitState());
         }
         return QuitTransition;
     }

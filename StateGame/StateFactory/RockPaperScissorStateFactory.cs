@@ -1,4 +1,5 @@
-﻿using Application.States;
+﻿using Application.GameInformation;
+using Application.States;
 using Application.TransitionFactory;
 using Application.Transitions;
 
@@ -7,25 +8,25 @@ namespace Application.StateFactory;
 public class RockPaperScissorStateFactory : IRockPaperScissorStateFactory
 {
     private static IRockPaperScissorStateFactory? _instance;
-    private IState? _gameOpponentTurn;
-    private IState? _gameStartState;
-    private IState? _quitState;
+    private IState<IRockPaperScissorGameInformation>? _gameOpponentTurn;
+    private IState<IRockPaperScissorGameInformation>? _gameStartState;
+    private IState<IRockPaperScissorGameInformation>? _quitState;
 
     private RockPaperScissorStateFactory()
     {
     }
 
-    public IState GetQuitState()
+    public IState<IRockPaperScissorGameInformation> GetQuitState()
     {
         if (_quitState == null)
         {
-            _quitState = new SimpleState("Das Spiel wurde beendet");
+            _quitState = new SimpleRockPaperScissorState("Das Spiel wurde beendet");
             _quitState.CreateTransitions();
         }
         return _quitState;
     }
 
-    public IState GetOpponentsTurnState()
+    public IState<IRockPaperScissorGameInformation> GetOpponentsTurnState()
     {
         if (_gameOpponentTurn == null)
         {
@@ -35,18 +36,18 @@ public class RockPaperScissorStateFactory : IRockPaperScissorStateFactory
         return _gameOpponentTurn;
     }
 
-    public IState GetGameStartState()
+    public IState<IRockPaperScissorGameInformation> GetGameStartState()
     {
         if (_gameStartState == null)
         {
             var introText = "Willkommen bei Schere Stein Papier! \n" +
                             "Gebe entweder Schere, Stein oder Papier ein \n" +
                             "Schere,Stein, Papier!";
-            var transitions = new List<ITransition>()
+            var transitions = new List<ITransition<IRockPaperScissorGameInformation>>()
             {
-                Application.TransitionFactory.RockPaperScissorTransitionFactory.GetInstance().GetGamePlayTransition()
+                RockPaperScissorTransitionFactory.GetInstance().GetGamePlayTransition()
             };
-            _gameStartState = new SimpleState(introText, transitions);
+            _gameStartState = new SimpleRockPaperScissorState(introText, transitions);
             _gameStartState.CreateTransitions();
         }
         return _gameStartState;
