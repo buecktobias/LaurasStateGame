@@ -50,15 +50,14 @@ public class RockPaperScissorStateFactory : IRockPaperScissorStateFactory
                             "Schere,Stein, Papier!";
             var transitions = new List<ITransition<IRockPaperScissorGameInformation>>()
             {
-                RockPaperScissorTransitionFactory.GetInstance().GetGamePlayTransition()
+                RockPaperScissorTransitionFactory.GetInstance().GetGamePlayTransition(),
+                RockPaperScissorTransitionFactory.GetInstance().GetWrongInputTransition()
             };
             var startStateBuilder = new SimpleRockPaperScissorBuilder();
             startStateBuilder.SetIntroOutput(introText);
             startStateBuilder.SetTransitions(transitions);
             _gameStartState = startStateBuilder.GetState();
             _gameStartState.CreateTransitions();
-
-            new Application.RockPaperScissors.States.SimpleRockPaperScissorState();
         }
         return _gameStartState;
     }

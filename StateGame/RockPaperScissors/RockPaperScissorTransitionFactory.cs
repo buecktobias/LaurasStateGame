@@ -21,6 +21,7 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
     private ITransition<IRockPaperScissorGameInformation>? GameLostTransition { get; set; }
     private ITransition<IRockPaperScissorGameInformation>? GamePlayTransition { get; set; }
     private ITransition<IRockPaperScissorGameInformation>? QuitTransition { get; set; }
+    private ITransition<IRockPaperScissorGameInformation>? WrongInputTransition { get; set; }
 
     public ITransition<IRockPaperScissorGameInformation> GetNoMatchTransition()
     {
@@ -124,5 +125,22 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
             QuitTransition = transitionBuilder.GetTransition();
         }
         return QuitTransition;
+    }
+
+    public ITransition<IRockPaperScissorGameInformation> GetWrongInputTransition()
+    {
+        if (this.WrongInputTransition == null)
+        {
+            var transitionBuilder = new TransitionBuilder();
+            transitionBuilder.SetOutput("Sie haben eine falsche Eingabe getätigt!");
+            transitionBuilder.SetMatchFunc((s, _) =>
+            {
+                return new SymbolInputReader().ReadSymbol(s) == null;
+            });
+            transitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetQuitState());
+            WrongInputTransition = transitionBuilder.GetTransition();
+        }
+
+        return WrongInputTransition;
     }
 }
