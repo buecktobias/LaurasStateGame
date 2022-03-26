@@ -15,6 +15,11 @@ public class OpponentsTurnState : AbstractState<IRockPaperScissorGameInformation
         Transitions.Add(RockPaperScissorTransitionFactory.GetGameWonTransition());
     }
 
+    public override bool NeedsUserInput()
+    {
+        return false;
+    }
+
     public override string GetIntroOutput()
     {
         return "Opponents turn";

@@ -9,16 +9,13 @@ public abstract class AbstractState<TGameInformation, TTransitionFactory> : ISta
     where TTransitionFactory : ITransitionFactory <TGameInformation>
 {
     protected readonly TTransitionFactory RockPaperScissorTransitionFactory;
-    
+    protected IList<ITransition<TGameInformation>> Transitions { get; }
     protected AbstractState(TTransitionFactory transitionFactory)
     {
         RockPaperScissorTransitionFactory = transitionFactory;
         Transitions = new List<ITransition<TGameInformation>>();
     }
-
-
-    protected IList<ITransition<TGameInformation>> Transitions { get; }
-
+    
     public virtual string GetIntroOutput()
     {
         return "";
@@ -45,9 +42,9 @@ public abstract class AbstractState<TGameInformation, TTransitionFactory> : ISta
         return rockPaperScissorGameInformation;
     }
 
-    public virtual void CreateTransitions()
-    {
-    }
+    public virtual void CreateTransitions() { }
+    public abstract bool NeedsUserInput();
+
     private ITransition<TGameInformation>? GetMatchedTransitions(string input, TGameInformation rockPaperScissorGameInformation)
     {
         return Transitions.FirstOrDefault(transition => transition.Matches(input, rockPaperScissorGameInformation));

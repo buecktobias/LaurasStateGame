@@ -31,115 +31,103 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
 
     public ITransition<IRockPaperScissorGameInformation> GetGameWonTransition()
     {
-        if (this.GameWonTransition == null)
-        {
-            bool MatchFunc(string s, IGameInformation info)
-            {
-                var gameInformation = (IRockPaperScissorGameInformation) info;
-                var gameResult = new GameEngine().GetGameResult(gameInformation.PlayerInformation,
-                    gameInformation.OpponentInformation);
-                return gameResult == GameResult.Won;
-            }
+        if (this.GameWonTransition != null) return GameWonTransition;
 
-            var transitionBuilder = new TransitionBuilder();
-            transitionBuilder.SetMatchFunc(MatchFunc);
-            transitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetQuitState());
-            transitionBuilder.SetOutput("Yeah Sie haben gewonnen!");
-            GameWonTransition = transitionBuilder.GetTransition();
+        bool MatchFunc(string s, IGameInformation info)
+        {
+            var gameInformation = (IRockPaperScissorGameInformation) info;
+            var gameResult = new GameEngine().GetGameResult(gameInformation.PlayerInformation,
+                gameInformation.OpponentInformation);
+            return gameResult == GameResult.Won;
         }
+
+        var gameWonTransitionBuilder = new TransitionBuilder();
+        gameWonTransitionBuilder.SetMatchFunc(MatchFunc);
+        gameWonTransitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetQuitState());
+        gameWonTransitionBuilder.SetOutput("Yeah Sie haben gewonnen!");
+        GameWonTransition = gameWonTransitionBuilder.GetTransition();
         return GameWonTransition;
     }
 
     public ITransition<IRockPaperScissorGameInformation> GetGameDrawTransition()
     {
-        if (this.GameDrawTransition == null)
-        {
-            TransitionMatchFunc matchFunc = (s, info) =>
-            {
-                var information = (IRockPaperScissorGameInformation) info;
-                return information.OpponentInformation == information.PlayerInformation;
-            };
-            var transitionBuilder = new TransitionBuilder();
-            transitionBuilder.SetMatchFunc(matchFunc);
-            transitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetGameStartState());
-            transitionBuilder.SetOutput("Unentschieden ! Nächste Runde !");
+        if (this.GameDrawTransition != null) return GameDrawTransition;
 
-            GameDrawTransition = transitionBuilder.GetTransition();
+        bool MatchFunc(string s, IGameInformation info)
+        {
+            var information = (IRockPaperScissorGameInformation) info;
+            return information.OpponentInformation == information.PlayerInformation;
         }
+
+        var transitionBuilder = new TransitionBuilder();
+        transitionBuilder.SetMatchFunc(MatchFunc);
+        transitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetGameStartState());
+        transitionBuilder.SetOutput("Unentschieden ! Nächste Runde !");
+
+        GameDrawTransition = transitionBuilder.GetTransition();
         return GameDrawTransition;
     }
     
 
     public ITransition<IRockPaperScissorGameInformation> GetGameLostTransition()
     {
-        if (this.GameLostTransition == null)
+        if (this.GameLostTransition != null) return GameLostTransition;
+
+        bool MatchFunc(string _, IGameInformation info)
         {
-            TransitionMatchFunc matchFunc = (_, info) =>
-            {
-                var gameInformation = (IRockPaperScissorGameInformation) info;
-                var result =new GameEngine().GetGameResult(gameInformation.PlayerInformation, gameInformation.OpponentInformation);
-                return result == GameResult.Lost;
-            };
-            var transitionBuilder = new TransitionBuilder();
-            transitionBuilder.SetMatchFunc(matchFunc);
-            transitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetQuitState());
-            transitionBuilder.SetOutput("Sie haben leider verloren!");
-            GameLostTransition = transitionBuilder.GetTransition();
+            var gameInformation = (IRockPaperScissorGameInformation) info;
+            var result = new GameEngine().GetGameResult(gameInformation.PlayerInformation, gameInformation.OpponentInformation);
+            return result == GameResult.Lost;
         }
+
+        var transitionBuilder = new TransitionBuilder();
+        transitionBuilder.SetMatchFunc(MatchFunc);
+        transitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetQuitState());
+        transitionBuilder.SetOutput("Sie haben leider verloren!");
+        GameLostTransition = transitionBuilder.GetTransition();
         return GameLostTransition;
     }
 
     public ITransition<IRockPaperScissorGameInformation> GetGamePlayTransition()
     {
-        if (this.GamePlayTransition == null)
+        if (this.GamePlayTransition != null) return GamePlayTransition;
+        var transitionBuilder = new TransitionBuilder();
+        transitionBuilder.SetExecuteFunc(((s, info) =>
         {
-            var transitionBuilder = new TransitionBuilder();
-            transitionBuilder.SetExecuteFunc(((s, info) =>
-            {
-                var information = (IRockPaperScissorGameInformation) info;
-                information.PlayerInformation = (GameSymbol) new SymbolInputReader().ReadSymbol(s);
-                return information;
-            }));
-            transitionBuilder.SetMatchFunc(((text, _) => (new SymbolInputReader().ReadSymbol(text)) != null));
-            transitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetOpponentsTurnState());
-            GamePlayTransition = transitionBuilder.GetTransition();
-        }
+            var information = (IRockPaperScissorGameInformation) info;
+            information.PlayerInformation = ((GameSymbol) new SymbolInputReader()!.ReadSymbol(s));
+            return information;
+        }));
+        transitionBuilder.SetMatchFunc(((text, _) => (new SymbolInputReader().ReadSymbol(text)) != null));
+        transitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetOpponentsTurnState());
+        GamePlayTransition = transitionBuilder.GetTransition();
         return GamePlayTransition;
         
     }
 
     public static RockPaperScissorTransitionFactory GetInstance()
     {
-        if (_instance == null) _instance = new RockPaperScissorTransitionFactory();
-
-        return _instance;
+        return _instance ??= new RockPaperScissorTransitionFactory();
     }
 
     public ITransition<IRockPaperScissorGameInformation> GetQuitTransition()
     {
-        if (this.QuitTransition == null)
-        {
-            var transitionBuilder = new TransitionBuilder();
-            transitionBuilder.SetMatchFunc((s, information) => s== "quit");
-            transitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetQuitState());
-            QuitTransition = transitionBuilder.GetTransition();
-        }
+        if (this.QuitTransition != null) return QuitTransition;
+        var transitionBuilder = new TransitionBuilder();
+        transitionBuilder.SetMatchFunc((s, information) => s == "quit");
+        transitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetQuitState());
+        QuitTransition = transitionBuilder.GetTransition();
         return QuitTransition;
     }
 
     public ITransition<IRockPaperScissorGameInformation> GetWrongInputTransition()
     {
-        if (this.WrongInputTransition == null)
-        {
-            var transitionBuilder = new TransitionBuilder();
-            transitionBuilder.SetOutput("Sie haben eine falsche Eingabe getätigt!");
-            transitionBuilder.SetMatchFunc((s, _) =>
-            {
-                return new SymbolInputReader().ReadSymbol(s) == null;
-            });
-            transitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetQuitState());
-            WrongInputTransition = transitionBuilder.GetTransition();
-        }
+        if (this.WrongInputTransition != null) return WrongInputTransition;
+        var transitionBuilder = new TransitionBuilder();
+        transitionBuilder.SetOutput("Sie haben eine falsche Eingabe getätigt!");
+        transitionBuilder.SetMatchFunc((s, _) => new SymbolInputReader().ReadSymbol(s) == null);
+        transitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetQuitState());
+        WrongInputTransition = transitionBuilder.GetTransition();
 
         return WrongInputTransition;
     }

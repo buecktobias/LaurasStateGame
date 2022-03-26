@@ -4,17 +4,18 @@ using Application.Transitions;
 
 namespace Application.Games;
 
-public abstract class AbstractGame <TGameInformation> where TGameInformation : IGameInformation
+public abstract class AbstractGame<TGameInformation> where TGameInformation : IGameInformation
 {
-    private readonly TGameInformation _startGameInformation;
+    private TGameInformation CurrentGameInformation;
+
     protected AbstractGame(IState<TGameInformation> startState, TGameInformation startGameInformation)
     {
         CurrentState = startState;
-        _startGameInformation = startGameInformation;
+        CurrentGameInformation = startGameInformation;
     }
 
     private IState<TGameInformation> CurrentState { get; set; }
-    
+
     public void StartGame()
     {
         GameLoop();
@@ -23,22 +24,27 @@ public abstract class AbstractGame <TGameInformation> where TGameInformation : I
     private void WriteStateIntroOutput()
     {
         Console.WriteLine(CurrentState.GetIntroOutput());
-
     }
 
-    private TGameInformation ExecuteCurrentState(TGameInformation gameInformation)
+    private void ExecuteCurrentState()
     {
-        return CurrentState.Execute(gameInformation);
+        
+        CurrentGameInformation = CurrentState.Execute(CurrentGameInformation);
     }
 
-    private string ReadInput()
+    private string GetUserInputIfNeeded()
     {
-        return Console.ReadLine() ?? string.Empty;
+        if (CurrentState.NeedsUserInput())
+        {
+            return Console.ReadLine() ?? string.Empty;
+        }
+
+        return string.Empty;
     }
 
-    private ITransition<TGameInformation> GetMatchingTransition(string input, TGameInformation gameInformation)
+    private ITransition<TGameInformation> GetMatchingTransition(string input)
     {
-        return CurrentState.GetMatchingTransitionInput(input, gameInformation);
+        return CurrentState.GetMatchingTransitionInput(input, (TGameInformation)CurrentGameInformation.GetCopy());
     }
 
     private void WriteStateOutroOutput()
@@ -51,17 +57,17 @@ public abstract class AbstractGame <TGameInformation> where TGameInformation : I
         Console.WriteLine(transition.GetOutput());
     }
 
+
     private void GameLoop()
     {
-        TGameInformation gameInformation = _startGameInformation;
         while (true)
         {
             WriteStateIntroOutput();
             if (CurrentState.IsEndState()) return;
-            gameInformation = ExecuteCurrentState(gameInformation);
-            var input = ReadInput();
-            var transition = GetMatchingTransition(input, gameInformation);
-            gameInformation = transition.Execute(input, gameInformation);
+            ExecuteCurrentState();
+            var input = GetUserInputIfNeeded();
+            var transition = GetMatchingTransition(input);
+            CurrentGameInformation = transition.Execute(input, CurrentGameInformation);
             WriteTransitionOutput(transition);
             WriteStateOutroOutput();
             CurrentState = transition.GetTargetState();

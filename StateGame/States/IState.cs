@@ -12,4 +12,5 @@ public interface IState <TGameInformation> where TGameInformation : IGameInforma
     public bool IsEndState();
     public TGameInformation Execute(TGameInformation gameInformation);
     public void CreateTransitions();
+    public bool NeedsUserInput();
 }

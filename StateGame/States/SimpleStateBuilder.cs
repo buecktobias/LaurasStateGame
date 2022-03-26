@@ -10,7 +10,7 @@ where TTransitionFactory : ITransitionFactory<TGameInformation>
 {
     private SimpleState<TGameInformation, TTransitionFactory> _state;
 
-    public SimpleStateBuilder(TTransitionFactory transitionFactory)
+    protected SimpleStateBuilder(TTransitionFactory transitionFactory)
     {
         _state = new SimpleState<TGameInformation, TTransitionFactory>(transitionFactory);
     }
@@ -47,6 +47,11 @@ where TTransitionFactory : ITransitionFactory<TGameInformation>
     public IState<TGameInformation> GetState()
     {
         return _state;
+    }
+
+    public void SetNeedsInput(bool needsInput)
+    {
+        _state.NeedsInput = needsInput;
     }
     
     

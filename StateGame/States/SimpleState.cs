@@ -1,26 +1,29 @@
 ﻿using Application.GameInformation;
 using Application.TransitionFactory;
 using Application.Transitions;
+
 namespace Application.States;
 
 public class SimpleState<TGameInformation, TTransitionFactory> : AbstractState<TGameInformation, TTransitionFactory>
-where TGameInformation : IGameInformation
-where TTransitionFactory : ITransitionFactory<TGameInformation>
+    where TGameInformation : IGameInformation
+    where TTransitionFactory : ITransitionFactory<TGameInformation>
 {
-    internal string IntroOutput { get; set; }
-    internal string OutroOutput { get; set; }
-    internal bool EndState { get; set; }
+    public string IntroOutput { get; set; }
+    public string OutroOutput { get; set; }
+    public bool EndState { get; set; }
+    public bool NeedsInput { get; set; }
 
-    internal IList<ITransition<TGameInformation>> NewTransitions { get; set; }
-    internal ExecutionFunction ExecuteFunc { get; set; }
+    public IList<ITransition<TGameInformation>> NewTransitions { get; set; }
+    public ExecutionFunction ExecuteFunc { get; set; }
 
-    internal SimpleState(TTransitionFactory transitionFactory) : base(transitionFactory)
+    public SimpleState(TTransitionFactory transitionFactory) : base(transitionFactory)
     {
         IntroOutput = "";
         OutroOutput = "";
         EndState = false;
         NewTransitions = new List<ITransition<TGameInformation>>();
         ExecuteFunc = (_ => _);
+        NeedsInput = true;
     }
 
 
@@ -50,5 +53,10 @@ where TTransitionFactory : ITransitionFactory<TGameInformation>
         {
             Transitions.Add(transition);
         }
+    }
+
+    public override bool NeedsUserInput()
+    {
+        return NeedsInput;
     }
 }
