@@ -12,18 +12,22 @@ public class SimpleTransition<TGameInformation, TStateFactory> : AbstractTransit
 where TGameInformation : IGameInformation
 where TStateFactory : IStateFactory
 {
-    public TransitionMatchFunc MatchFunc { get; set; }
-    public TransitionExecuteFunc ExecuteFunc { get; set; }
-    public IState<TGameInformation>? TargetState { get; set; }
-    public string Output { get; set; }
+    private TransitionMatchFunc? MatchFunc { get; }
 
-    
-    public SimpleTransition(TStateFactory stateFactory) : base(stateFactory)
+    private TransitionExecuteFunc ExecuteFunc { get;}
+
+    private IState<TGameInformation> TargetState { get; }
+
+    private string Output { get;}
+
+
+    public SimpleTransition(string output, IState<TGameInformation> targetState,
+        TransitionExecuteFunc executeFunc, TransitionMatchFunc matchFunc)
     {
-        MatchFunc = (_, _) => true;
-        ExecuteFunc = (_, information) => information;
-        TargetState = null;
-        Output = "";
+        Output = output;
+        TargetState = targetState;
+        ExecuteFunc = executeFunc;
+        MatchFunc = matchFunc;
     }
 
 

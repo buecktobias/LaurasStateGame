@@ -6,12 +6,13 @@ namespace Application.Games;
 
 public abstract class AbstractGame<TGameInformation> where TGameInformation : IGameInformation
 {
-    private TGameInformation CurrentGameInformation;
+    private TGameInformation _currentGameInformation;
+    private ITransition<TGameInformation>? _currentTransition;
 
     protected AbstractGame(IState<TGameInformation> startState, TGameInformation startGameInformation)
     {
         CurrentState = startState;
-        CurrentGameInformation = startGameInformation;
+        _currentGameInformation = startGameInformation;
     }
 
     private IState<TGameInformation> CurrentState { get; set; }
@@ -29,7 +30,11 @@ public abstract class AbstractGame<TGameInformation> where TGameInformation : IG
     private void ExecuteCurrentState()
     {
         
-        CurrentGameInformation = CurrentState.Execute(CurrentGameInformation);
+        _currentGameInformation = CurrentState.Execute(_currentGameInformation);
+        var input = GetUserInputIfNeeded();
+        _currentTransition = GetMatchingTransition(input);
+        _currentGameInformation = _currentTransition.Execute(input, _currentGameInformation);
+        WriteTransitionOutput(_currentTransition);
     }
 
     private string GetUserInputIfNeeded()
@@ -44,7 +49,7 @@ public abstract class AbstractGame<TGameInformation> where TGameInformation : IG
 
     private ITransition<TGameInformation> GetMatchingTransition(string input)
     {
-        return CurrentState.GetMatchingTransitionInput(input, (TGameInformation)CurrentGameInformation.GetCopy());
+        return CurrentState.GetMatchingTransitionInput(input, (TGameInformation)_currentGameInformation.GetCopy());
     }
 
     private void WriteStateOutroOutput()
@@ -65,12 +70,8 @@ public abstract class AbstractGame<TGameInformation> where TGameInformation : IG
             WriteStateIntroOutput();
             if (CurrentState.IsEndState()) return;
             ExecuteCurrentState();
-            var input = GetUserInputIfNeeded();
-            var transition = GetMatchingTransition(input);
-            CurrentGameInformation = transition.Execute(input, CurrentGameInformation);
-            WriteTransitionOutput(transition);
             WriteStateOutroOutput();
-            CurrentState = transition.GetTargetState();
+            CurrentState = _currentTransition!.GetTargetState();
         }
     }
 }

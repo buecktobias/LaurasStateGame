@@ -1,4 +1,5 @@
-﻿using Application.GameInformation;
+﻿using Application.Exceptions;
+using Application.GameInformation;
 using Application.StateFactory;
 using Application.States;
 using Application.TransitionFactory;
@@ -9,35 +10,50 @@ public class SimpleTransitionBuilder <TGameInformation, TStateFactory>
 where TGameInformation : IGameInformation
 where TStateFactory : IStateFactory
 {
-    private SimpleTransition<TGameInformation, TStateFactory> _transition;
-
-    public SimpleTransitionBuilder(TStateFactory stateFactory)
+    private TransitionMatchFunc? _matchFunc;
+    private TransitionExecuteFunc? _executeFunc;
+    private TransitionMatchFunc MatchFunc
     {
-        _transition = new SimpleTransition<TGameInformation, TStateFactory>(stateFactory);
+        get
+        {
+            return _matchFunc ?? ((_, _) => true);
+        }
+        set => _matchFunc = value;
     }
 
-    public void SetMatchFunc(TransitionMatchFunc matchFunc)
+    private TransitionExecuteFunc ExecuteFunc
     {
-        _transition.MatchFunc = matchFunc;
+        get => _executeFunc?? ((_, information) => information) ;
+        set => _executeFunc = value;
     }
 
-    public void SetExecuteFunc(TransitionExecuteFunc executeFunc)
+    private IState<TGameInformation> TargetState { get; set; }
+    
+    private string Output { get; set; }
+
+    public void SetMatchFunc(TransitionMatchFunc? matchFunc)
     {
-        _transition.ExecuteFunc = executeFunc;
+       MatchFunc = matchFunc;
+    }
+
+    public void SetExecuteFunc(TransitionExecuteFunc? executeFunc)
+    {
+        ExecuteFunc = executeFunc;
     }
 
     public void SetOutput(string newOutput)
     {
-        _transition.Output = newOutput;
+        Output = newOutput;
     }
 
     public void SetTargetState(IState<TGameInformation> state)
     {
-        _transition.TargetState = state;
+        TargetState = state;
     }
 
     public ITransition<TGameInformation> GetTransition()
     {
-        return _transition;
+        
+        return new SimpleTransition<TGameInformation,TStateFactory>(Output,TargetState,ExecuteFunc,MatchFunc);
     }
 }

@@ -8,7 +8,7 @@ public class SimpleStateBuilder <TGameInformation, TTransitionFactory>
 where TGameInformation : IGameInformation
 where TTransitionFactory : ITransitionFactory<TGameInformation>
 {
-    private SimpleState<TGameInformation, TTransitionFactory> _state;
+    private readonly SimpleState<TGameInformation, TTransitionFactory> _state;
 
     protected SimpleStateBuilder(TTransitionFactory transitionFactory)
     {

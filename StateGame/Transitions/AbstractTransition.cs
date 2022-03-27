@@ -8,11 +8,6 @@ public abstract class AbstractTransition<TGameInformation, TStateFactory> : ITra
 where TGameInformation : IGameInformation
 where TStateFactory : IStateFactory
 {
-    protected AbstractTransition(TStateFactory stateFactory)
-    {
-        StateFactory = stateFactory;
-    }
-    protected  TStateFactory StateFactory { get; }
 
     public abstract bool Matches(string input, TGameInformation gameInformation);
 
