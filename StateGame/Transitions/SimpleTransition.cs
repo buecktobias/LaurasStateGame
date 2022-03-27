@@ -8,19 +8,11 @@ namespace Application.Transitions;
 public delegate bool TransitionMatchFunc(string inputText, IGameInformation gameInformation);
 
 public delegate IGameInformation TransitionExecuteFunc(string inputText, IGameInformation gameInformation);
+
 public class SimpleTransition<TGameInformation, TStateFactory> : AbstractTransition<TGameInformation, TStateFactory>
-where TGameInformation : IGameInformation
-where TStateFactory : IStateFactory
+    where TGameInformation : IGameInformation
+    where TStateFactory : IStateFactory
 {
-    private TransitionMatchFunc? MatchFunc { get; }
-
-    private TransitionExecuteFunc ExecuteFunc { get;}
-
-    private IState<TGameInformation> TargetState { get; }
-
-    private string Output { get;}
-
-
     public SimpleTransition(string output, IState<TGameInformation> targetState,
         TransitionExecuteFunc executeFunc, TransitionMatchFunc matchFunc)
     {
@@ -29,6 +21,14 @@ where TStateFactory : IStateFactory
         ExecuteFunc = executeFunc;
         MatchFunc = matchFunc;
     }
+
+    private TransitionMatchFunc? MatchFunc { get; }
+
+    private TransitionExecuteFunc ExecuteFunc { get; }
+
+    private IState<TGameInformation> TargetState { get; }
+
+    private string Output { get; }
 
 
     public override bool Matches(string input, TGameInformation gameInformation)

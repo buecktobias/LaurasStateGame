@@ -1,39 +1,35 @@
-﻿using Application.Exceptions;
-using Application.GameInformation;
+﻿using Application.GameInformation;
 using Application.StateFactory;
 using Application.States;
-using Application.TransitionFactory;
 
 namespace Application.Transitions;
 
-public class SimpleTransitionBuilder <TGameInformation, TStateFactory>
-where TGameInformation : IGameInformation
-where TStateFactory : IStateFactory
+public class SimpleTransitionBuilder<TGameInformation, TStateFactory>
+    where TGameInformation : IGameInformation
+    where TStateFactory : IStateFactory
 {
-    private TransitionMatchFunc? _matchFunc;
     private TransitionExecuteFunc? _executeFunc;
+    private TransitionMatchFunc? _matchFunc;
+
     private TransitionMatchFunc MatchFunc
     {
-        get
-        {
-            return _matchFunc ?? ((_, _) => true);
-        }
+        get { return _matchFunc ?? ((_, _) => true); }
         set => _matchFunc = value;
     }
 
     private TransitionExecuteFunc ExecuteFunc
     {
-        get => _executeFunc?? ((_, information) => information) ;
+        get => _executeFunc ?? ((_, information) => information);
         set => _executeFunc = value;
     }
 
     private IState<TGameInformation> TargetState { get; set; }
-    
+
     private string Output { get; set; }
 
     public void SetMatchFunc(TransitionMatchFunc? matchFunc)
     {
-       MatchFunc = matchFunc;
+        MatchFunc = matchFunc;
     }
 
     public void SetExecuteFunc(TransitionExecuteFunc? executeFunc)
@@ -53,7 +49,6 @@ where TStateFactory : IStateFactory
 
     public ITransition<TGameInformation> GetTransition()
     {
-        
-        return new SimpleTransition<TGameInformation,TStateFactory>(Output,TargetState,ExecuteFunc,MatchFunc);
+        return new SimpleTransition<TGameInformation, TStateFactory>(Output, TargetState, ExecuteFunc, MatchFunc);
     }
 }

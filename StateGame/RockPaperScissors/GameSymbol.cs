@@ -2,5 +2,7 @@
 
 public enum GameSymbol
 {
-    Paper,Stone,Scissor
+    Paper,
+    Stone,
+    Scissor
 }

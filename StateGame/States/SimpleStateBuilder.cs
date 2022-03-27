@@ -4,9 +4,9 @@ using Application.Transitions;
 
 namespace Application.States;
 
-public class SimpleStateBuilder <TGameInformation, TTransitionFactory>
-where TGameInformation : IGameInformation
-where TTransitionFactory : ITransitionFactory<TGameInformation>
+public class SimpleStateBuilder<TGameInformation, TTransitionFactory>
+    where TGameInformation : IGameInformation
+    where TTransitionFactory : ITransitionFactory<TGameInformation>
 {
     private readonly SimpleState<TGameInformation, TTransitionFactory> _state;
 
@@ -19,11 +19,12 @@ where TTransitionFactory : ITransitionFactory<TGameInformation>
     {
         _state.EndState = true;
     }
+
     public void SetIntroOutput(string introOutput)
     {
         _state.IntroOutput = introOutput;
     }
-    
+
     public void SetOutroOutput(string outroOutput)
     {
         _state.OutroOutput = outroOutput;
@@ -53,6 +54,4 @@ where TTransitionFactory : ITransitionFactory<TGameInformation>
     {
         _state.NeedsInput = needsInput;
     }
-    
-    
 }

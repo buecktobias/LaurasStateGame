@@ -3,8 +3,8 @@ using Application.Transitions;
 
 namespace Application.TransitionFactory;
 
-public interface ITransitionFactory <TGameInformation>
-where TGameInformation : IGameInformation
+public interface ITransitionFactory<TGameInformation>
+    where TGameInformation : IGameInformation
 {
-    public abstract ITransition<TGameInformation> GetNoMatchTransition();
+    public ITransition<TGameInformation> GetNoMatchTransition();
 }

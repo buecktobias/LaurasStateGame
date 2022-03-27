@@ -8,6 +8,12 @@ public class OpponentsTurnState : AbstractState<IRockPaperScissorGameInformation
     IRockPaperScissorTransitionFactory>
 {
     private readonly Random _randomNumberGenerator;
+
+    public OpponentsTurnState() : base(RockPaperScissors.RockPaperScissorTransitionFactory.GetInstance())
+    {
+        _randomNumberGenerator = new Random();
+    }
+
     public override void CreateTransitions()
     {
         Transitions.Add(RockPaperScissorTransitionFactory.GetGameDrawTransition());
@@ -26,21 +32,17 @@ public class OpponentsTurnState : AbstractState<IRockPaperScissorGameInformation
     }
 
 
-    public override IRockPaperScissorGameInformation Execute(IRockPaperScissorGameInformation rockPaperScissorGameInformation)
+    public override IRockPaperScissorGameInformation Execute(
+        IRockPaperScissorGameInformation rockPaperScissorGameInformation)
     {
         rockPaperScissorGameInformation.OpponentInformation = GetRandom();
         Console.WriteLine("Der Gegner hat " + rockPaperScissorGameInformation.OpponentInformation + " gewählt.");
         return rockPaperScissorGameInformation;
     }
-    
+
     private GameSymbol GetRandom()
     {
         var num = _randomNumberGenerator.Next(0, 3);
         return new List<GameSymbol> {GameSymbol.Stone, GameSymbol.Stone, GameSymbol.Paper}[num];
-    }
-
-    public OpponentsTurnState() : base(RockPaperScissors.RockPaperScissorTransitionFactory.GetInstance())
-    {
-        _randomNumberGenerator = new Random();
     }
 }

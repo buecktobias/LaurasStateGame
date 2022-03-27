@@ -4,7 +4,8 @@ using Application.TransitionFactory;
 
 namespace Application.RockPaperScissors.States;
 
-internal class SimpleRockPaperScissorState : AbstractState<IRockPaperScissorGameInformation, IRockPaperScissorTransitionFactory>
+internal class
+    SimpleRockPaperScissorState : AbstractState<IRockPaperScissorGameInformation, IRockPaperScissorTransitionFactory>
 {
     internal SimpleRockPaperScissorState() : base(RockPaperScissors.RockPaperScissorTransitionFactory.GetInstance())
     {

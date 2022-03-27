@@ -17,22 +17,24 @@ public record SymbolPair(GameSymbol First, GameSymbol Second)
         return HashCode.Combine((int) First, (int) Second);
     }
 }
+
 public class GameEngine
 {
-
     private IList<SymbolPair> WinsAgainstList()
     {
-        return new List<SymbolPair>()
+        return new List<SymbolPair>
         {
-            new (GameSymbol.Paper, GameSymbol.Stone),
-            new (GameSymbol.Stone, GameSymbol.Scissor),
-            new (GameSymbol.Scissor, GameSymbol.Paper)
+            new(GameSymbol.Paper, GameSymbol.Stone),
+            new(GameSymbol.Stone, GameSymbol.Scissor),
+            new(GameSymbol.Scissor, GameSymbol.Paper)
         };
     }
+
     private bool IsDraw(GameSymbol gameSymbol1, GameSymbol gameSymbol2)
     {
         return gameSymbol1 == gameSymbol2;
     }
+
     public GameResult GetGameResult(GameSymbol gameSymbol1, GameSymbol gameSymbol2)
     {
         var hasWon = WinsAgainstList().Contains(new SymbolPair(gameSymbol1, gameSymbol2));

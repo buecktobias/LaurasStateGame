@@ -4,24 +4,27 @@ using Application.Transitions;
 
 namespace Application.States;
 
-public abstract class AbstractState<TGameInformation, TTransitionFactory> : IState<TGameInformation> 
+public abstract class AbstractState<TGameInformation, TTransitionFactory> : IState<TGameInformation>
     where TGameInformation : IGameInformation
-    where TTransitionFactory : ITransitionFactory <TGameInformation>
+    where TTransitionFactory : ITransitionFactory<TGameInformation>
 {
     protected readonly TTransitionFactory RockPaperScissorTransitionFactory;
-    protected IList<ITransition<TGameInformation>> Transitions { get; }
+
     protected AbstractState(TTransitionFactory transitionFactory)
     {
         RockPaperScissorTransitionFactory = transitionFactory;
         Transitions = new List<ITransition<TGameInformation>>();
     }
-    
+
+    protected IList<ITransition<TGameInformation>> Transitions { get; }
+
     public virtual string GetIntroOutput()
     {
         return "";
     }
 
-    public ITransition<TGameInformation> GetMatchingTransitionInput(string input, TGameInformation rockPaperScissorGameInformation)
+    public ITransition<TGameInformation> GetMatchingTransitionInput(string input,
+        TGameInformation rockPaperScissorGameInformation)
     {
         var transitionOrNull = GetMatchedTransitions(input, rockPaperScissorGameInformation);
         return transitionOrNull ?? RockPaperScissorTransitionFactory.GetNoMatchTransition();
@@ -42,13 +45,15 @@ public abstract class AbstractState<TGameInformation, TTransitionFactory> : ISta
         return rockPaperScissorGameInformation;
     }
 
-    public virtual void CreateTransitions() { }
+    public virtual void CreateTransitions()
+    {
+    }
+
     public abstract bool NeedsUserInput();
 
-    private ITransition<TGameInformation>? GetMatchedTransitions(string input, TGameInformation rockPaperScissorGameInformation)
+    private ITransition<TGameInformation>? GetMatchedTransitions(string input,
+        TGameInformation rockPaperScissorGameInformation)
     {
         return Transitions.FirstOrDefault(transition => transition.Matches(input, rockPaperScissorGameInformation));
     }
-
-
 }

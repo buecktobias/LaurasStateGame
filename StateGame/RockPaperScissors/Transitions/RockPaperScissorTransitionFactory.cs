@@ -31,7 +31,7 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
 
     public ITransition<IRockPaperScissorGameInformation> GetGameWonTransition()
     {
-        if (this.GameWonTransition != null) return GameWonTransition;
+        if (GameWonTransition != null) return GameWonTransition;
 
         bool MatchFunc(string s, IGameInformation info)
         {
@@ -51,7 +51,7 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
 
     public ITransition<IRockPaperScissorGameInformation> GetGameDrawTransition()
     {
-        if (this.GameDrawTransition != null) return GameDrawTransition;
+        if (GameDrawTransition != null) return GameDrawTransition;
 
         bool MatchFunc(string s, IGameInformation info)
         {
@@ -67,16 +67,17 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
         GameDrawTransition = transitionBuilder.GetTransition();
         return GameDrawTransition;
     }
-    
+
 
     public ITransition<IRockPaperScissorGameInformation> GetGameLostTransition()
     {
-        if (this.GameLostTransition != null) return GameLostTransition;
+        if (GameLostTransition != null) return GameLostTransition;
 
         bool MatchFunc(string _, IGameInformation info)
         {
             var gameInformation = (IRockPaperScissorGameInformation) info;
-            var result = new GameEngine().GetGameResult(gameInformation.PlayerInformation, gameInformation.OpponentInformation);
+            var result = new GameEngine().GetGameResult(gameInformation.PlayerInformation,
+                gameInformation.OpponentInformation);
             return result == GameResult.Lost;
         }
 
@@ -90,19 +91,18 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
 
     public ITransition<IRockPaperScissorGameInformation> GetGamePlayTransition()
     {
-        if (this.GamePlayTransition != null) return GamePlayTransition;
+        if (GamePlayTransition != null) return GamePlayTransition;
         var transitionBuilder = new TransitionBuilder();
-        transitionBuilder.SetExecuteFunc(((s, info) =>
+        transitionBuilder.SetExecuteFunc((s, info) =>
         {
             var information = (IRockPaperScissorGameInformation) info;
-            information.PlayerInformation = ((GameSymbol) new SymbolInputReader()!.ReadSymbol(s));
+            information.PlayerInformation = (GameSymbol) new SymbolInputReader()!.ReadSymbol(s);
             return information;
-        }));
-        transitionBuilder.SetMatchFunc(((text, _) => (new SymbolInputReader().ReadSymbol(text)) != null));
+        });
+        transitionBuilder.SetMatchFunc((text, _) => new SymbolInputReader().ReadSymbol(text) != null);
         transitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetOpponentsTurnState());
         GamePlayTransition = transitionBuilder.GetTransition();
         return GamePlayTransition;
-        
     }
 
     public static RockPaperScissorTransitionFactory GetInstance()
@@ -112,7 +112,7 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
 
     public ITransition<IRockPaperScissorGameInformation> GetQuitTransition()
     {
-        if (this.QuitTransition != null) return QuitTransition;
+        if (QuitTransition != null) return QuitTransition;
         var transitionBuilder = new TransitionBuilder();
         transitionBuilder.SetMatchFunc((s, information) => s == "quit");
         transitionBuilder.SetTargetState(_rockPaperScissorStateFactory.GetQuitState());
@@ -122,7 +122,7 @@ public class RockPaperScissorTransitionFactory : IRockPaperScissorTransitionFact
 
     public ITransition<IRockPaperScissorGameInformation> GetWrongInputTransition()
     {
-        if (this.WrongInputTransition != null) return WrongInputTransition;
+        if (WrongInputTransition != null) return WrongInputTransition;
         var transitionBuilder = new TransitionBuilder();
         transitionBuilder.SetOutput("Sie haben eine falsche Eingabe getätigt!");
         transitionBuilder.SetMatchFunc((s, _) => new SymbolInputReader().ReadSymbol(s) == null);

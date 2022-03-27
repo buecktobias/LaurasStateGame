@@ -29,7 +29,6 @@ public abstract class AbstractGame<TGameInformation> where TGameInformation : IG
 
     private void ExecuteCurrentState()
     {
-        
         _currentGameInformation = CurrentState.Execute(_currentGameInformation);
         var input = GetUserInputIfNeeded();
         _currentTransition = GetMatchingTransition(input);
@@ -39,17 +38,14 @@ public abstract class AbstractGame<TGameInformation> where TGameInformation : IG
 
     private string GetUserInputIfNeeded()
     {
-        if (CurrentState.NeedsUserInput())
-        {
-            return Console.ReadLine() ?? string.Empty;
-        }
+        if (CurrentState.NeedsUserInput()) return Console.ReadLine() ?? string.Empty;
 
         return string.Empty;
     }
 
     private ITransition<TGameInformation> GetMatchingTransition(string input)
     {
-        return CurrentState.GetMatchingTransitionInput(input, (TGameInformation)_currentGameInformation.GetCopy());
+        return CurrentState.GetMatchingTransitionInput(input, (TGameInformation) _currentGameInformation.GetCopy());
     }
 
     private void WriteStateOutroOutput()

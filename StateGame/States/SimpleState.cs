@@ -8,6 +8,16 @@ public class SimpleState<TGameInformation, TTransitionFactory> : AbstractState<T
     where TGameInformation : IGameInformation
     where TTransitionFactory : ITransitionFactory<TGameInformation>
 {
+    public SimpleState(TTransitionFactory transitionFactory) : base(transitionFactory)
+    {
+        IntroOutput = "";
+        OutroOutput = "";
+        EndState = false;
+        NewTransitions = new List<ITransition<TGameInformation>>();
+        ExecuteFunc = _ => _;
+        NeedsInput = true;
+    }
+
     public string IntroOutput { get; set; }
     public string OutroOutput { get; set; }
     public bool EndState { get; set; }
@@ -15,16 +25,6 @@ public class SimpleState<TGameInformation, TTransitionFactory> : AbstractState<T
 
     public IList<ITransition<TGameInformation>> NewTransitions { get; set; }
     public ExecutionFunction ExecuteFunc { get; set; }
-
-    public SimpleState(TTransitionFactory transitionFactory) : base(transitionFactory)
-    {
-        IntroOutput = "";
-        OutroOutput = "";
-        EndState = false;
-        NewTransitions = new List<ITransition<TGameInformation>>();
-        ExecuteFunc = (_ => _);
-        NeedsInput = true;
-    }
 
 
     public override string GetIntroOutput()
@@ -49,10 +49,7 @@ public class SimpleState<TGameInformation, TTransitionFactory> : AbstractState<T
 
     public override void CreateTransitions()
     {
-        foreach (var transition in NewTransitions)
-        {
-            Transitions.Add(transition);
-        }
+        foreach (var transition in NewTransitions) Transitions.Add(transition);
     }
 
     public override bool NeedsUserInput()

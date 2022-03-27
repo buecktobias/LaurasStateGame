@@ -4,6 +4,7 @@ using Application.Transitions;
 
 namespace Application.RockPaperScissors;
 
-public class TransitionBuilder : SimpleTransitionBuilder<IRockPaperScissorGameInformation, IRockPaperScissorStateFactory>
+public class
+    TransitionBuilder : SimpleTransitionBuilder<IRockPaperScissorGameInformation, IRockPaperScissorStateFactory>
 {
 }

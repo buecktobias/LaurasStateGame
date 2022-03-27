@@ -2,7 +2,6 @@
 using Application.RockPaperScissors.States;
 using Application.StateFactory;
 using Application.States;
-using Application.TransitionFactory;
 using Application.Transitions;
 
 namespace Application.RockPaperScissors;
@@ -28,6 +27,7 @@ public class RockPaperScissorStateFactory : IRockPaperScissorStateFactory
             _quitState = stateBuilder.GetState();
             _quitState.CreateTransitions();
         }
+
         return _quitState;
     }
 
@@ -38,6 +38,7 @@ public class RockPaperScissorStateFactory : IRockPaperScissorStateFactory
             _gameOpponentTurn = new OpponentsTurnState();
             _gameOpponentTurn.CreateTransitions();
         }
+
         return _gameOpponentTurn;
     }
 
@@ -48,7 +49,7 @@ public class RockPaperScissorStateFactory : IRockPaperScissorStateFactory
             var introText = "Willkommen bei Schere Stein Papier! \n" +
                             "Gebe entweder Schere, Stein oder Papier ein \n" +
                             "Schere,Stein, Papier!";
-            var transitions = new List<ITransition<IRockPaperScissorGameInformation>>()
+            var transitions = new List<ITransition<IRockPaperScissorGameInformation>>
             {
                 RockPaperScissorTransitionFactory.GetInstance().GetGamePlayTransition(),
                 RockPaperScissorTransitionFactory.GetInstance().GetWrongInputTransition()
@@ -59,17 +60,14 @@ public class RockPaperScissorStateFactory : IRockPaperScissorStateFactory
             _gameStartState = startStateBuilder.GetState();
             _gameStartState.CreateTransitions();
         }
+
         return _gameStartState;
     }
-    
+
 
     public static IRockPaperScissorStateFactory GetInstance()
     {
-        if (_instance == null)
-        {
-            _instance = new RockPaperScissorStateFactory();
-            
-        }
+        if (_instance == null) _instance = new RockPaperScissorStateFactory();
 
         return _instance;
     }
